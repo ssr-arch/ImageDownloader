@@ -1,0 +1,8 @@
+# vscode
+.vscode
+
+# maven
+target
+
+# other
+src/test/**/ImageDownloaderTest.java
