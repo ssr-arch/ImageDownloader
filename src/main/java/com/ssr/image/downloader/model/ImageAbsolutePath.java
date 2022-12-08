@@ -5,14 +5,15 @@ import java.net.URL;
 
 public class ImageAbsolutePath {
 
-    private final String accessUrl;
-    private final String source;
     private final String path;
 
     public ImageAbsolutePath(String access, String source) {
-        this.accessUrl = access;
-        this.source = source;
         this.path = create(access, source);
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 
     // test
@@ -65,11 +66,6 @@ public class ImageAbsolutePath {
             return sourceUrl;
         }
         return sourceUrl.substring(1);
-    }
-
-    @Override
-    public String toString() {
-        return path;
     }
 
 }

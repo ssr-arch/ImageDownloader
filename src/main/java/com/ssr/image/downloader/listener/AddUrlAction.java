@@ -4,14 +4,14 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import com.ssr.image.downloader.delegator.InsertRowsDelegator;
+import com.ssr.image.downloader.delegate.InsertRowsDelegate;
 import com.ssr.image.downloader.ui.dialog.AddUrlDialog;
 
 public class AddUrlAction extends AbstractAction {
 
-    private final InsertRowsDelegator insertRowsDelegator;
+    private final InsertRowsDelegate insertRowsDelegator;
 
-    public AddUrlAction(InsertRowsDelegator delegator) {
+    public AddUrlAction(InsertRowsDelegate delegator) {
         this.insertRowsDelegator = delegator;
     }
 

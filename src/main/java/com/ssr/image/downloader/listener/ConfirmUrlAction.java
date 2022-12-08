@@ -8,17 +8,17 @@ import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import com.ssr.image.downloader.delegator.InsertRowsDelegator;
+import com.ssr.image.downloader.delegate.InsertRowsDelegate;
 import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.TableRecord;
 import com.ssr.image.downloader.worker.GetImageSourcesWorker;
 
 public class ConfirmUrlAction extends AbstractAction {
 
-    private final InsertRowsDelegator insertRowsDelegator;
+    private final InsertRowsDelegate insertRowsDelegator;
     private final JTextField urlField;
 
-    public ConfirmUrlAction(InsertRowsDelegator insertRowsDelegator, JTextField textField) {
+    public ConfirmUrlAction(InsertRowsDelegate insertRowsDelegator, JTextField textField) {
         this.insertRowsDelegator = insertRowsDelegator;
         this.urlField = textField;
     }
@@ -41,7 +41,7 @@ public class ConfirmUrlAction extends AbstractAction {
         var records = sources.stream()
                 .map(TableRecord::new)
                 .toArray(TableRecord[]::new);
-        insertRowsDelegator.add(records);
+        insertRowsDelegator.invoke(records);
         var message = String.format("add %s files", String.valueOf(records.length));
         JOptionPane.showMessageDialog(null,
                 message,
