@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -12,18 +14,17 @@ import javax.swing.SwingWorker;
 
 import org.jsoup.Jsoup;
 
-import com.ssr.image.downloader.delegate.ShowDownloadFileNameDelegate;
 import com.ssr.image.downloader.model.ImageSource;
 
 public class DownLoadImageWorker extends SwingWorker<String, String> {
 
     private final List<ImageSource> sources;
-    private final ShowDownloadFileNameDelegate showDownloadFileNameDelegator;
+    private final Consumer<String> setFileNameAction;
     private final LocalDateTime workedAt;
 
-    public DownLoadImageWorker(List<ImageSource> sources, ShowDownloadFileNameDelegate showDownloadFileNameDelegator) {
+    public DownLoadImageWorker(List<ImageSource> sources, Consumer<String> setFileNameAction) {
         this.sources = sources;
-        this.showDownloadFileNameDelegator = showDownloadFileNameDelegator;
+        this.setFileNameAction = setFileNameAction;
         this.workedAt = LocalDateTime.now();
     }
 
@@ -51,7 +52,7 @@ public class DownLoadImageWorker extends SwingWorker<String, String> {
 
     @Override
     protected void process(List<String> chunks) {
-        showDownloadFileNameDelegator.invoke(chunks.get(0));
+        setFileNameAction.accept(chunks.get(0));
     }
 
     @Override
@@ -61,6 +62,11 @@ public class DownLoadImageWorker extends SwingWorker<String, String> {
             JOptionPane.showMessageDialog(null,
                     message,
                     "download complete",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (CancellationException e) {
+            JOptionPane.showMessageDialog(null,
+                    "download cancelled",
+                    "download cancelled",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,

@@ -17,8 +17,8 @@ public class MainPanel {
         this.panel = new JPanel(new BorderLayout());
         var table = new ImageTable();
         var footerPanel = new JPanel();
-        var addUrlButton = new AddUrlButton(table.getInsertRowsDelegator());
-        var downLoadButton = new DownLoadButton(table.getReadRowsDelegator());
+        var addUrlButton = new AddUrlButton(table.createInsertRecordAction());
+        var downLoadButton = new DownLoadButton(table.createGetCheckedRecordsGetter());
         footerPanel.add(addUrlButton.get());
         footerPanel.add(downLoadButton.get());
         add(table.get(), BorderLayout.CENTER);

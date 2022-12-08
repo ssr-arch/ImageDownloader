@@ -1,17 +1,15 @@
 package com.ssr.image.downloader.ui.dialog;
 
 import java.awt.BorderLayout;
-import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.util.function.Consumer;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-
-import com.ssr.image.downloader.delegate.ShowDownloadFileNameDelegate;
-import com.ssr.image.downloader.listener.DeterminateProgressBarCreator;
-import com.ssr.image.downloader.listener.WorkerCompletionWaiter;
+import javax.swing.SwingWorker;
 
 public class DownLoadDialog {
 
@@ -36,16 +34,32 @@ public class DownLoadDialog {
         dialog.setLocationRelativeTo(null);
     }
 
-    public ShowDownloadFileNameDelegate getShowDownloadFileNameDelegate() {
-        return new ShowDownloadFileNameDelegate(s -> fileName.setText(s));
+    public Consumer<String> createSetFileNameAction() {
+        return t -> fileName.setText(t);
     }
 
-    public PropertyChangeListener getProgressBarCreator() {
-        return new DeterminateProgressBarCreator(progressBar);
+    public Consumer<PropertyChangeEvent> createDeterminateProgressBarAction() {
+        return t -> {
+            if (t.getPropertyName().equals("progress")) {
+                progressBar.setValue((int) t.getNewValue());
+            }
+        };
     }
 
-    public WorkerCompletionWaiter getWorkerCompletionWaiter() {
-        return new WorkerCompletionWaiter(dialog);
+    public Consumer<PropertyChangeEvent> createWorkerCompletionWaiterAction() {
+        return t -> {
+            if (t.getPropertyName().equals("state")) {
+                if (t.getNewValue().equals(SwingWorker.StateValue.DONE)) {
+                    dialog.dispose();
+                }
+            }
+        };
+    }
+
+    public Consumer<SwingWorker> createCancelAction() {
+        return t -> {
+            cancelButton.addActionListener(e -> t.cancel(true));
+        };
     }
 
     public void show() {

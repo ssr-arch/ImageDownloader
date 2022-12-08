@@ -1,13 +1,14 @@
 package com.ssr.image.downloader.ui.table;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import com.ssr.image.downloader.delegate.InsertRowsDelegate;
-import com.ssr.image.downloader.delegate.ReadCheckedRecordsDelegate;
 import com.ssr.image.downloader.model.TableRecord;
 
 public class ImageTable {
@@ -20,22 +21,20 @@ public class ImageTable {
         this.table = new JTable(model);
     }
 
-    public InsertRowsDelegate getInsertRowsDelegator() {
-        return new InsertRowsDelegate(records -> {
+    public Consumer<TableRecord[]> createInsertRecordAction() {
+        return t -> {
             // discard all elements before inserting elements
             model.setRowCount(0);
-            Arrays.asList(records).forEach(r -> model.addRow(r.getRowData()));
-        });
+            Arrays.asList(t).forEach(r -> model.addRow(r.getRowData()));
+        };
     }
 
-    public ReadCheckedRecordsDelegate getReadRowsDelegator() {
-        return new ReadCheckedRecordsDelegate(() -> {
-            return model.getDataVector()
-                    .stream()
-                    .map(TableRecord::new)
-                    .filter(TableRecord::isChecked)
-                    .toList();
-        });
+    public Supplier<List<TableRecord>> createGetCheckedRecordsGetter() {
+        return () -> model.getDataVector()
+                .stream()
+                .map(TableRecord::new)
+                .filter(TableRecord::isChecked)
+                .toList();
     }
 
     public JComponent get() {
