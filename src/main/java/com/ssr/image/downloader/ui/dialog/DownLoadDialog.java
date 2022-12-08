@@ -20,12 +20,12 @@ public class DownLoadDialog {
 
     public DownLoadDialog() {
         this.dialog = new JDialog();
-        this.progressBar = new JProgressBar();
         this.fileName = new JLabel("filename");
+        this.progressBar = new JProgressBar();
         this.cancelButton = new JButton("cancel");
         var panel = new JPanel(new BorderLayout());
-        panel.add(progressBar, BorderLayout.NORTH);
         panel.add(fileName, BorderLayout.CENTER);
+        panel.add(progressBar, BorderLayout.NORTH);
         panel.add(cancelButton, BorderLayout.SOUTH);
         dialog.getContentPane().add(panel);
         dialog.pack();

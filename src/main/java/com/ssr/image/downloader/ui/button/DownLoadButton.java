@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.TableRecord;
 import com.ssr.image.downloader.ui.dialog.DownLoadDialog;
 import com.ssr.image.downloader.worker.DownLoadImageWorker;
@@ -21,8 +22,8 @@ public class DownLoadButton {
             var sources = checkedRecordsGetter.get()
                     .stream()
                     .map(TableRecord::getSource)
-                    .toList();
-            if (sources.size() == 0) {
+                    .toArray(ImageSource[]::new);
+            if (sources.length == 0) {
                 JOptionPane.showMessageDialog(null,
                         "not selected",
                         "download",
