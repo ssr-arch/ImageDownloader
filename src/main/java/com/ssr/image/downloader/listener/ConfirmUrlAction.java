@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.ssr.image.downloader.delegator.InsertRowsDelegator;
@@ -24,12 +25,16 @@ public class ConfirmUrlAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        var getHtmlWorker = new GetImageSourcesWorker(urlField.getText());
-        getHtmlWorker.execute();
         List<ImageSource> sources = new ArrayList<>();
         try {
+            var getHtmlWorker = new GetImageSourcesWorker(urlField.getText());
+            getHtmlWorker.execute();
             sources = getHtmlWorker.get();
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "error",
+                    JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return;
         }
@@ -37,6 +42,11 @@ public class ConfirmUrlAction extends AbstractAction {
                 .map(TableRecord::new)
                 .toArray(TableRecord[]::new);
         insertRowsDelegator.add(records);
+        var message = String.format("add %s files", String.valueOf(records.length));
+        JOptionPane.showMessageDialog(null,
+                message,
+                "add url",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
