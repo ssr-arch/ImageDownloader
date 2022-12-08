@@ -17,8 +17,8 @@ public class ImageTable extends JTable {
     public ImageTable() {
         this.model = new CustomTableModel();
         setModel(model);
-        var tableHeader = getTableHeader();
-        tableHeader.addMouseListener(new ImageTableHeaderClickAdapter(this));
+        getTableHeader().addMouseListener(new ImageTableHeaderClickAdapter(this));
+
     }
 
     @Override

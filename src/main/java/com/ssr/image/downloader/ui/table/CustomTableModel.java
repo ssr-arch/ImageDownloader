@@ -8,9 +8,9 @@ import com.ssr.image.downloader.model.ImageSource;
 public class CustomTableModel extends DefaultTableModel {
 
     public CustomTableModel() {
-        addColumn("check");
-        addColumn("src");
-        addColumn("preview");
+        addColumn("ALL");
+        addColumn("FileName");
+        addColumn("Preview");
     }
 
     @Override
