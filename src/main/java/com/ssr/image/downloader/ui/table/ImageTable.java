@@ -5,20 +5,39 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import com.ssr.image.downloader.listener.ImageTableHeaderClickAdapter;
 import com.ssr.image.downloader.model.TableRecord;
 
-public class ImageTable {
+public class ImageTable extends JTable {
 
     private final CustomTableModel model;
-    private final JTable table;
 
     public ImageTable() {
         this.model = new CustomTableModel();
-        this.table = new JTable(model);
+        setModel(model);
+        var tableHeader = getTableHeader();
+        tableHeader.addMouseListener(new ImageTableHeaderClickAdapter(this));
+    }
+
+    @Override
+    public int getSelectedRowCount() {
+        return model.getSelectedRowCount();
+    }
+
+    @Override
+    public void selectAll() {
+        if (model != null) {
+            model.setAllChecks(true);
+        }
+    }
+
+    @Override
+    public void clearSelection() {
+        if (model != null) {
+            model.setAllChecks(false);
+        }
     }
 
     public Consumer<TableRecord[]> createInsertRecordAction() {
@@ -35,10 +54,6 @@ public class ImageTable {
                 .map(TableRecord::new)
                 .filter(TableRecord::isChecked)
                 .toList();
-    }
-
-    public JComponent get() {
-        return new JScrollPane(table);
     }
 
 }

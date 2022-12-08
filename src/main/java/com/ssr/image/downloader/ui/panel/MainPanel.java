@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.ssr.image.downloader.ui.button.AddUrlButton;
 import com.ssr.image.downloader.ui.button.DownLoadButton;
@@ -21,7 +22,7 @@ public class MainPanel {
         var downLoadButton = new DownLoadButton(table.createGetCheckedRecordsGetter());
         footerPanel.add(addUrlButton.get());
         footerPanel.add(downLoadButton.get());
-        add(table.get(), BorderLayout.CENTER);
+        add(new JScrollPane(table), BorderLayout.CENTER);
         add(footerPanel, BorderLayout.SOUTH);
     }
 
