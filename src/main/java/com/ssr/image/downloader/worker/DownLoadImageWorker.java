@@ -1,9 +1,8 @@
 package com.ssr.image.downloader.worker;
 
 import java.io.ByteArrayInputStream;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.function.Consumer;
@@ -12,42 +11,46 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-import org.jsoup.Jsoup;
-
+import com.ssr.image.downloader.model.DownloadDirectory;
 import com.ssr.image.downloader.model.ImageSource;
 
 public class DownLoadImageWorker extends SwingWorker<String, String> {
 
-    private final List<ImageSource> sources;
+    private final ImageSource[] sources;
     private final Consumer<String> setFileNameAction;
-    private final LocalDateTime workedAt;
 
-    public DownLoadImageWorker(List<ImageSource> sources, Consumer<String> setFileNameAction) {
+    public DownLoadImageWorker(ImageSource[] sources, Consumer<String> setFileNameAction) {
         this.sources = sources;
         this.setFileNameAction = setFileNameAction;
-        this.workedAt = LocalDateTime.now();
     }
 
     @Override
     protected String doInBackground() throws Exception {
-        for (int i = 0; i < sources.size(); i++) {
-            Thread.sleep(1000);
-            publish(sources.get(i).getFileName());
-            var downloadDirectory = Path.of(System.getProperty("user.home"), "Downloads");
-            var dateDirectory = workedAt.format(DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss"));
-            var saveDirectory = downloadDirectory.resolve("image-downloader").resolve(dateDirectory);
-            saveDirectory.toFile().mkdirs();
-            var bufferedImage = ImageIO.read(new ByteArrayInputStream(
-                    Jsoup.connect(sources.get(i).getDownLoadUrl())
-                            .ignoreContentType(true)
-                            .execute()
-                            .bodyAsBytes()));
-            var saveFile = saveDirectory.resolve(sources.get(i).getFileName()).toFile();
-            ImageIO.write(bufferedImage, sources.get(i).getFormat(), saveFile);
-            var percent = ((float) (i + 1) / (float) sources.size()) * 100;
-            setProgress((int) percent);
+        var directory = new DownloadDirectory();
+        if (!directory.create()) {
+            throw new SecurityException("not permitted create directory");
         }
-        return String.format("downloaded %s files", String.valueOf(sources.size()));
+        for (int i = 0; i < sources.length; i++) {
+            setProgress(0);
+            publish(sources[i].getFileName());
+            var url = new URL(sources[i].getDownLoadUrl());
+            var connection = url.openConnection();
+            final var contentLength = connection.getContentLengthLong();
+            var outputStream = new ByteArrayOutputStream((int) contentLength);
+            try (var inputStream = url.openStream()) {
+                var readBytes = 0;
+                while ((readBytes = inputStream.read()) != -1) {
+                    outputStream.write(readBytes);
+                    var percent = ((float) outputStream.size() / (float) contentLength) * 100;
+                    setProgress((int) percent);
+                }
+                var bufferedImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
+                directory.saveImage(bufferedImage, sources[i]);
+            }
+            Thread.sleep(100);
+        }
+        return String.format("downloaded %s files", String.valueOf(sources.length));
+
     }
 
     @Override
@@ -69,8 +72,9 @@ public class DownLoadImageWorker extends SwingWorker<String, String> {
                     "download cancelled",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null,
-                    e.getMessage(),
+                    "failed download",
                     "failed download",
                     JOptionPane.ERROR_MESSAGE);
         }

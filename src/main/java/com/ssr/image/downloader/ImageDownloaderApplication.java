@@ -7,7 +7,7 @@ import javax.swing.WindowConstants;
 
 import com.ssr.image.downloader.ui.panel.MainPanel;
 
-public class ImageDownloader {
+public class ImageDownloaderApplication {
     public static void main(String[] args) {
         var frame = new JFrame("image-downloader");
         frame.setLayout(new BorderLayout());

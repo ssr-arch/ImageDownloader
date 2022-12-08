@@ -8,9 +8,9 @@ import com.ssr.image.downloader.model.ImageSource;
 public class CustomTableModel extends DefaultTableModel {
 
     public CustomTableModel() {
-        addColumn("check");
-        addColumn("src");
-        addColumn("preview");
+        addColumn("ALL");
+        addColumn("FileName");
+        addColumn("Preview");
     }
 
     @Override
@@ -24,6 +24,22 @@ public class CustomTableModel extends DefaultTableModel {
                 return ImageIcon.class;
         }
         throw new RuntimeException();
+    }
+
+    public int getSelectedRowCount() {
+        return getDataVector()
+                .stream()
+                .map(v -> (Boolean) v.elementAt(0))
+                .filter(b -> b)
+                .toList()
+                .size();
+    }
+
+    public void setAllChecks(boolean value) {
+        var rowCount = getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            setValueAt((Boolean) value, i, 0);
+        }
     }
 
 }
