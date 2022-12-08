@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-import com.ssr.image.downloader.listener.ConfirmUrlAction;
 import com.ssr.image.downloader.model.TableRecord;
 import com.ssr.image.downloader.ui.dialog.AddUrlDialog;
 
@@ -17,8 +16,7 @@ public class AddUrlButton {
         this.addUrl = new JButton();
         addUrl.setText("add url");
         addUrl.addActionListener(e -> {
-            var dialog = new AddUrlDialog();
-            dialog.addOkButtonAction(new ConfirmUrlAction(insertRecordsAction, dialog.createUrlGetter()));
+            var dialog = new AddUrlDialog(insertRecordsAction);
             dialog.show();
         });
     }
