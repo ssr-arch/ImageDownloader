@@ -1,6 +1,7 @@
 package com.ssr.image.downloader.worker;
 
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -14,25 +15,22 @@ import com.ssr.image.downloader.model.ImageSource;
 
 public class GetImageSourcesWorker extends SwingWorker<List<ImageSource>, String> {
 
-    private final String url;
+    private final URL url;
 
-    public GetImageSourcesWorker(String url) {
-        this.url = url;
+    public GetImageSourcesWorker(String url) throws MalformedURLException {
+        this.url = new URL(url);
     }
 
     @Override
     protected List<ImageSource> doInBackground() throws Exception {
-        if (url == null || url.length() == 0) {
-            return new ArrayList<>();
-        }
-        Element body = Jsoup.connect(url).get().body();
+        Element body = Jsoup.connect(url.toString()).get().body();
         Elements elements = body.getElementsByTag("img");
         // base64形式はスルー
         var a = elements.stream()
                 .filter(e -> e.attributes().get("src") != null)
                 .map(e -> e.attributes().get("src"))
                 .filter(s -> !s.startsWith("data"))
-                .map(s -> new ImageAbsolutePath(url, s))
+                .map(s -> new ImageAbsolutePath(url.toString(), s))
                 .map(ImageSource::new)
                 .toList();
         return a;
