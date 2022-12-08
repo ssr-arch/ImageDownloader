@@ -25,11 +25,12 @@ public class GetImageSourcesWorker extends SwingWorker<List<ImageSource>, String
     protected List<ImageSource> doInBackground() throws Exception {
         Element body = Jsoup.connect(url.toString()).get().body();
         Elements elements = body.getElementsByTag("img");
-        // base64形式はスルー
+        // base64,svgはスルー lazyloadはどうするか？
         var a = elements.stream()
                 .filter(e -> e.attributes().get("src") != null)
                 .map(e -> e.attributes().get("src"))
                 .filter(s -> !s.startsWith("data"))
+                .filter(s -> !s.contains(".svg"))
                 .map(s -> new ImageAbsolutePath(url.toString(), s))
                 .map(ImageSource::new)
                 .toList();
