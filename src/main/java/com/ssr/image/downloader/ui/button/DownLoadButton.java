@@ -1,19 +1,41 @@
 package com.ssr.image.downloader.ui.button;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
-import com.ssr.image.downloader.delegator.ReadRecordsDelegator;
+import com.ssr.image.downloader.model.TableRecord;
+import com.ssr.image.downloader.ui.dialog.DownLoadDialog;
+import com.ssr.image.downloader.worker.DownLoadImageWorker;
 
 public class DownLoadButton {
 
     private final JButton button;
 
-    public DownLoadButton(ReadRecordsDelegator readRowsDelegator) {
+    public DownLoadButton(Supplier<List<TableRecord>> checkedRecordsGetter) {
         this.button = new JButton("download");
         button.addActionListener(e -> {
-            var tableRecords = readRowsDelegator.read();
-            tableRecords.forEach(System.out::println);
+            var sources = checkedRecordsGetter.get()
+                    .stream()
+                    .map(TableRecord::getSource)
+                    .toList();
+            if (sources.size() == 0) {
+                JOptionPane.showMessageDialog(null,
+                        "not selected",
+                        "download",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            var dialog = new DownLoadDialog();
+            var worker = new DownLoadImageWorker(sources, dialog.createSetFileNameAction());
+            worker.addPropertyChangeListener(evt -> dialog.createDeterminateProgressBarAction().accept(evt));
+            worker.addPropertyChangeListener(evt -> dialog.createWorkerCompletionWaiterAction().accept(evt));
+            dialog.createCancelAction().accept(worker);
+            worker.execute();
+            dialog.show();
         });
     }
 
