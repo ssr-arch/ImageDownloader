@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.TableRecord;
 import com.ssr.image.downloader.ui.dialog.DownLoadDialog;
-import com.ssr.image.downloader.worker.DownLoadImageWorker;
+import com.ssr.image.downloader.worker.DownloadImagesWorker;
 
 public class DownLoadButton {
 
@@ -31,7 +31,7 @@ public class DownLoadButton {
                 return;
             }
             var dialog = new DownLoadDialog();
-            var worker = new DownLoadImageWorker(sources, dialog.createSetFileNameAction());
+            var worker = new DownloadImagesWorker(sources, dialog.createSetFileNameAction());
             worker.addPropertyChangeListener(evt -> dialog.createDeterminateProgressBarAction().accept(evt));
             worker.addPropertyChangeListener(evt -> dialog.createWorkerCompletionWaiterAction().accept(evt));
             dialog.createCancelAction().accept(worker);
