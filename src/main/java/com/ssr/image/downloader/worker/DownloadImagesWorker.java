@@ -28,13 +28,13 @@ public class DownloadImagesWorker extends SwingWorker<String, String> {
     @Override
     protected String doInBackground() throws Exception {
         var directory = new DownloadDirectory();
-        var imageCache = ImageCache.getInstance();
         if (!directory.create()) {
             throw new SecurityException("not permitted create directory");
         }
+        var imageCache = ImageCache.getInstance();
         for (int i = 0; i < sources.length; i++) {
             var downloadUrl = sources[i].getDownLoadUrl();
-            var cachedImage = imageCache.get(downloadUrl);
+            var cachedImage = imageCache.get(sources[i]);
             if (cachedImage != null) {
                 directory.saveImage(cachedImage, sources[i]);
                 continue;
@@ -52,9 +52,10 @@ public class DownloadImagesWorker extends SwingWorker<String, String> {
                     var percent = ((float) outputStream.size() / (float) contentLength) * 100;
                     setProgress((int) percent);
                 }
-                var bufferedImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
-                directory.saveImage(bufferedImage, sources[i]);
             }
+            var downloadedImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
+            imageCache.add(sources[i], downloadedImage);
+            directory.saveImage(downloadedImage, sources[i]);
             Thread.sleep(1000);
         }
         return String.format("downloaded %s files", String.valueOf(sources.length));

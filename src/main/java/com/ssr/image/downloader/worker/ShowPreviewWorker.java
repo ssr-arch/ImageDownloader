@@ -4,41 +4,38 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.SwingWorker;
-import javax.swing.plaf.DimensionUIResource;
 
 import org.jsoup.Jsoup;
 
 import com.ssr.image.downloader.model.ImageCache;
+import com.ssr.image.downloader.model.ImageSource;
+import com.ssr.image.downloader.ui.dialog.PreviewDialog;
 
 public class ShowPreviewWorker extends SwingWorker<BufferedImage, String> {
 
-    private final JLabel iconLabel;
-    private String url;
-    private JDialog dialog;
+    private final ImageSource source;
+    private final PreviewDialog dialog;
 
-    public ShowPreviewWorker(JLabel iconLabel, String url, JDialog dialog) {
-        this.iconLabel = iconLabel;
-        this.url = url;
+    public ShowPreviewWorker(ImageSource source, PreviewDialog dialog) {
+        this.source = source;
         this.dialog = dialog;
     }
 
     @Override
     protected BufferedImage doInBackground() throws Exception {
+        var downloadUrl = source.getDownLoadUrl();
         var imageCache = ImageCache.getInstance();
-        var cachedImage = imageCache.get(url);
+        var cachedImage = imageCache.get(source);
         if (cachedImage != null) {
             return cachedImage;
         }
         var downloadImage = ImageIO.read(new ByteArrayInputStream(Jsoup
-                .connect(url)
+                .connect(downloadUrl)
                 .ignoreContentType(true)
                 .execute()
                 .bodyAsBytes()));
-        imageCache.add(url, downloadImage);
+        imageCache.add(source, downloadImage);
         return downloadImage;
     }
 
@@ -46,14 +43,8 @@ public class ShowPreviewWorker extends SwingWorker<BufferedImage, String> {
     protected void done() {
         try {
             BufferedImage image = get();
-            var dimension = new DimensionUIResource(image.getWidth(), image.getHeight());
-            iconLabel.setIcon(new ImageIcon(image));
-            iconLabel.setPreferredSize(dimension);
-            dialog.setTitle("preview");
-            dialog.getContentPane().add(iconLabel);
-            dialog.pack();
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
+            dialog.setImage(image);
+            dialog.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

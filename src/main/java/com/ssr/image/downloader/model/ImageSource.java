@@ -25,6 +25,19 @@ public class ImageSource {
         return fileName;
     }
 
+    @Override
+    public int hashCode() {
+        return absolutePath.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ImageSource)) {
+            return false;
+        }
+        return ((ImageSource) obj).absolutePath.equals(this);
+    }
+
     public String getFormat() {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

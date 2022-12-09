@@ -1,14 +1,14 @@
 package com.ssr.image.downloader.listener;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.event.MouseInputAdapter;
 
+import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.ImageTableColumnConstants;
+import com.ssr.image.downloader.ui.dialog.PreviewDialog;
 import com.ssr.image.downloader.worker.ShowPreviewWorker;
 
 public class ImageTablePreviewClickAdapter extends MouseInputAdapter {
@@ -25,11 +25,15 @@ public class ImageTablePreviewClickAdapter extends MouseInputAdapter {
         if (table.columnAtPoint(point) != ImageTableColumnConstants.PREVIEW.column()) {
             return;
         }
-        var row = table.rowAtPoint(point);
-        var column = table.columnAtPoint(point);
-        var previewIcon = (ImageIcon) table.getValueAt(row, column);
-        var icon = new JLabel();
-        var worker = new ShowPreviewWorker(icon, previewIcon.getDescription(), new JDialog());
+        var imageSource = (ImageSource) table.getValueAt(
+                table.rowAtPoint(point),
+                ImageTableColumnConstants.FILE_NAME.column());
+        Point tablePositionOnScreen = table.getLocationOnScreen();
+        var clickedPosition = new Point(
+                (int) (tablePositionOnScreen.getX() + point.getX() + 10),
+                (int) (tablePositionOnScreen.getY() + point.getY()));
+        var dialog = new PreviewDialog(clickedPosition);
+        var worker = new ShowPreviewWorker(imageSource, dialog);
         worker.execute();
     }
 
