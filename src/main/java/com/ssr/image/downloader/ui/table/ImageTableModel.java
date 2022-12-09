@@ -3,8 +3,8 @@ package com.ssr.image.downloader.ui.table;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
-import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.ImageTableColumnConstants;
+import com.ssr.image.downloader.model.html.ImageSource;
 
 public class ImageTableModel extends DefaultTableModel {
 

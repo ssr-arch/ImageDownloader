@@ -13,7 +13,7 @@ import javax.swing.SwingWorker;
 
 import com.ssr.image.downloader.model.DownloadDirectory;
 import com.ssr.image.downloader.model.ImageCache;
-import com.ssr.image.downloader.model.ImageSource;
+import com.ssr.image.downloader.model.html.ImageSource;
 
 public class DownloadImagesWorker extends SwingWorker<String, String> {
 

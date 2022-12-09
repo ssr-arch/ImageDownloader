@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 import org.jsoup.Jsoup;
 
 import com.ssr.image.downloader.model.ImageCache;
-import com.ssr.image.downloader.model.ImageSource;
+import com.ssr.image.downloader.model.html.ImageSource;
 import com.ssr.image.downloader.ui.dialog.PreviewDialog;
 
 public class ShowPreviewWorker extends SwingWorker<BufferedImage, String> {

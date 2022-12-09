@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ssr.image.downloader.model.html.ImageSource;
+
 public class ImageCache {
 
     private static final ImageCache imageCache = new ImageCache();

@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 import javax.imageio.ImageIO;
 
+import com.ssr.image.downloader.model.html.ImageSource;
+
 public class DownloadDirectory {
 
     private final Path directory;

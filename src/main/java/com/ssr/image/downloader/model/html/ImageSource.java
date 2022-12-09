@@ -1,4 +1,6 @@
-package com.ssr.image.downloader.model;
+package com.ssr.image.downloader.model.html;
+
+import com.ssr.image.downloader.model.ImageAbsolutePath;
 
 public class ImageSource {
 

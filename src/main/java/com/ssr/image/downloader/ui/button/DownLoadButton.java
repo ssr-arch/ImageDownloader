@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import com.ssr.image.downloader.model.ImageSource;
 import com.ssr.image.downloader.model.TableRecord;
+import com.ssr.image.downloader.model.html.ImageSource;
 import com.ssr.image.downloader.ui.dialog.DownLoadDialog;
 import com.ssr.image.downloader.worker.DownloadImagesWorker;
 

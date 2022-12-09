@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
+import com.ssr.image.downloader.model.html.ImageSource;
+
 public class TableRecord {
 
     private final Boolean isChecked;

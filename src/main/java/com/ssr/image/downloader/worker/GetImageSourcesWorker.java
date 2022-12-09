@@ -11,7 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.ssr.image.downloader.model.ImageAbsolutePath;
-import com.ssr.image.downloader.model.ImageSource;
+import com.ssr.image.downloader.model.html.ImageSource;
 
 public class GetImageSourcesWorker extends SwingWorker<List<ImageSource>, String> {
 
