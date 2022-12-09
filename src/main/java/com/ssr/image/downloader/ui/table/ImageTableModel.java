@@ -4,13 +4,14 @@ import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 import com.ssr.image.downloader.model.ImageSource;
+import com.ssr.image.downloader.model.ImageTableColumnConstants;
 
 public class ImageTableModel extends DefaultTableModel {
 
     public ImageTableModel() {
-        addColumn("ALL");
-        addColumn("FileName");
-        addColumn("Preview");
+        addColumn(ImageTableColumnConstants.ALL.value());
+        addColumn(ImageTableColumnConstants.FILE_NAME.value());
+        addColumn(ImageTableColumnConstants.PREVIEW.value());
     }
 
     @Override
