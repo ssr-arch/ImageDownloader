@@ -12,14 +12,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import com.ssr.image.downloader.model.DownloadDirectory;
+import com.ssr.image.downloader.model.ImageCache;
 import com.ssr.image.downloader.model.ImageSource;
 
-public class DownLoadImageWorker extends SwingWorker<String, String> {
+public class DownloadImagesWorker extends SwingWorker<String, String> {
 
     private final ImageSource[] sources;
     private final Consumer<String> setFileNameAction;
 
-    public DownLoadImageWorker(ImageSource[] sources, Consumer<String> setFileNameAction) {
+    public DownloadImagesWorker(ImageSource[] sources, Consumer<String> setFileNameAction) {
         this.sources = sources;
         this.setFileNameAction = setFileNameAction;
     }
@@ -27,13 +28,20 @@ public class DownLoadImageWorker extends SwingWorker<String, String> {
     @Override
     protected String doInBackground() throws Exception {
         var directory = new DownloadDirectory();
+        var imageCache = ImageCache.getInstance();
         if (!directory.create()) {
             throw new SecurityException("not permitted create directory");
         }
         for (int i = 0; i < sources.length; i++) {
+            var downloadUrl = sources[i].getDownLoadUrl();
+            var cachedImage = imageCache.get(downloadUrl);
+            if (cachedImage != null) {
+                directory.saveImage(cachedImage, sources[i]);
+                continue;
+            }
             setProgress(0);
             publish(sources[i].getFileName());
-            var url = new URL(sources[i].getDownLoadUrl());
+            var url = new URL(downloadUrl);
             var connection = url.openConnection();
             final var contentLength = connection.getContentLengthLong();
             var outputStream = new ByteArrayOutputStream((int) contentLength);
@@ -47,7 +55,7 @@ public class DownLoadImageWorker extends SwingWorker<String, String> {
                 var bufferedImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
                 directory.saveImage(bufferedImage, sources[i]);
             }
-            Thread.sleep(100);
+            Thread.sleep(1000);
         }
         return String.format("downloaded %s files", String.valueOf(sources.length));
 
