@@ -5,9 +5,9 @@ import javax.swing.table.DefaultTableModel;
 
 import com.ssr.image.downloader.model.ImageSource;
 
-public class CustomTableModel extends DefaultTableModel {
+public class ImageTableModel extends DefaultTableModel {
 
-    public CustomTableModel() {
+    public ImageTableModel() {
         addColumn("ALL");
         addColumn("FileName");
         addColumn("Preview");

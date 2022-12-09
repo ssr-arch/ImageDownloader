@@ -11,7 +11,7 @@ public class ImageTableTest {
     @Test
     void addCustomRow() {
         var frame = new JFrame();
-        var model = new CustomTableModel();
+        var model = new ImageTableModel();
         var table = new JTable(model);
         frame.add(new JScrollPane(table));
         frame.setSize(500, 400);

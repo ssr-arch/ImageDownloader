@@ -12,10 +12,10 @@ import com.ssr.image.downloader.model.TableRecord;
 
 public class ImageTable extends JTable {
 
-    private final CustomTableModel model;
+    private final ImageTableModel model;
 
     public ImageTable() {
-        this.model = new CustomTableModel();
+        this.model = new ImageTableModel();
         setModel(model);
         getTableHeader().addMouseListener(new ImageTableHeaderClickAdapter(this));
 
