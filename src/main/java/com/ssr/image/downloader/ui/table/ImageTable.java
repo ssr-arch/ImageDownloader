@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import javax.swing.JTable;
 
 import com.ssr.image.downloader.listener.ImageTableHeaderClickAdapter;
+import com.ssr.image.downloader.listener.ImageTablePreviewClickAdapter;
 import com.ssr.image.downloader.model.TableRecord;
 
 public class ImageTable extends JTable {
@@ -18,7 +19,7 @@ public class ImageTable extends JTable {
         this.model = new ImageTableModel();
         setModel(model);
         getTableHeader().addMouseListener(new ImageTableHeaderClickAdapter(this));
-
+        addMouseListener(new ImageTablePreviewClickAdapter(this));
     }
 
     @Override

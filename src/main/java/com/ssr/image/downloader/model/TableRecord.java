@@ -12,12 +12,13 @@ public class TableRecord {
 
     /**
      * create instance
-     * @param imageSrc
+     * @param imageSource
      */
-    public TableRecord(ImageSource imageSrc) {
+    public TableRecord(ImageSource imageSource) {
         this.isChecked = Boolean.FALSE;
-        this.imageSource = imageSrc;
+        this.imageSource = imageSource;
         this.previewIcon = new ImageIcon(getClass().getClassLoader().getResource("images/preview.png"));
+        previewIcon.setDescription(imageSource.getDownLoadUrl());
     }
 
     /**
