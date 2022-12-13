@@ -1,8 +1,8 @@
 package com.ssr.image.downloader.model;
 
-import java.util.Vector;
-
 import javax.swing.ImageIcon;
+
+import com.ssr.image.downloader.model.html.ImageSource;
 
 public class TableRecord {
 
@@ -10,26 +10,13 @@ public class TableRecord {
     private final ImageSource imageSource;
     private final ImageIcon previewIcon;
 
-    /**
-     * create instance
-     * @param imageSrc
-     */
-    public TableRecord(ImageSource imageSrc) {
+    public TableRecord(ImageSource imageSource) {
         this.isChecked = Boolean.FALSE;
-        this.imageSource = imageSrc;
+        this.imageSource = imageSource;
         this.previewIcon = new ImageIcon(getClass().getClassLoader().getResource("images/preview.png"));
     }
 
-    /**
-     * from table 
-     * @param vector
-     */
-    public TableRecord(Vector vector) {
-        this.isChecked = (Boolean) vector.get(0);
-        this.imageSource = (ImageSource) vector.get(1);
-        this.previewIcon = (ImageIcon) vector.get(2);
-    }
-
+    // for cell renderer
     @Override
     public String toString() {
         return imageSource.toString();
@@ -37,14 +24,6 @@ public class TableRecord {
 
     public Object[] getRowData() {
         return new Object[] { isChecked, imageSource, previewIcon };
-    }
-
-    public boolean isChecked() {
-        return isChecked.booleanValue();
-    }
-
-    public ImageSource getSource() {
-        return imageSource;
     }
 
 }

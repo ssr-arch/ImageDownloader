@@ -2,36 +2,33 @@ package com.ssr.image.downloader.ui.panel;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JComponent;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-import com.ssr.image.downloader.ui.button.AddUrlButton;
-import com.ssr.image.downloader.ui.button.DownLoadButton;
+import com.ssr.image.downloader.listener.DownloadAction;
+import com.ssr.image.downloader.listener.OpenAddUrlDialogAction;
 import com.ssr.image.downloader.ui.table.ImageTable;
 
-public class MainPanel {
+public class MainPanel extends JPanel {
 
-    private final JPanel panel;
+    private final JTable imageTable;
+    private final JButton addUrlButton;
+    private final JButton downloadButton;
 
     public MainPanel() {
-        this.panel = new JPanel(new BorderLayout());
-        var table = new ImageTable();
+        this.imageTable = new ImageTable();
+        this.addUrlButton = new JButton("add url");
+        this.downloadButton = new JButton("download");
+        addUrlButton.addActionListener(new OpenAddUrlDialogAction(imageTable.getModel()));
+        downloadButton.addActionListener(new DownloadAction(imageTable));
         var footerPanel = new JPanel();
-        var addUrlButton = new AddUrlButton(table.createInsertRecordAction());
-        var downLoadButton = new DownLoadButton(table.createGetCheckedRecordsGetter());
-        footerPanel.add(addUrlButton.get());
-        footerPanel.add(downLoadButton.get());
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        footerPanel.add(addUrlButton);
+        footerPanel.add(downloadButton);
+        setLayout(new BorderLayout());
+        add(new JScrollPane(imageTable), BorderLayout.CENTER);
         add(footerPanel, BorderLayout.SOUTH);
-    }
-
-    public void add(JComponent component, String borderLayoutConstraint) {
-        panel.add(component, borderLayoutConstraint);
-    }
-
-    public JComponent get() {
-        return panel;
     }
 
 }

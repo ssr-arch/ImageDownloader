@@ -16,6 +16,14 @@ public class ImageAbsolutePath {
         return path;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ImageAbsolutePath)) {
+            return false;
+        }
+        return ((ImageAbsolutePath) obj).path.equals(path);
+    }
+
     // test
     private String create(String access, String source) {
         if (isAbsolutePath(source)) {

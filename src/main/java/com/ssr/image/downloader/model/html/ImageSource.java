@@ -1,4 +1,6 @@
-package com.ssr.image.downloader.model;
+package com.ssr.image.downloader.model.html;
+
+import com.ssr.image.downloader.model.ImageAbsolutePath;
 
 public class ImageSource {
 
@@ -23,6 +25,19 @@ public class ImageSource {
     @Override
     public String toString() {
         return fileName;
+    }
+
+    @Override
+    public int hashCode() {
+        return absolutePath.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ImageSource)) {
+            return false;
+        }
+        return ((ImageSource) obj).absolutePath.equals(this);
     }
 
     public String getFormat() {
