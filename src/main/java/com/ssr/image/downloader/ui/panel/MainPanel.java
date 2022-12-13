@@ -21,8 +21,8 @@ public class MainPanel extends JPanel {
         this.imageTable = new ImageTable();
         this.addUrlButton = new JButton("add url");
         this.downloadButton = new JButton("download");
-        addUrlButton.addActionListener(e -> new OpenAddUrlDialogAction(imageTable.getModel()).actionPerformed(e));
-        downloadButton.addActionListener(e -> new DownloadAction(imageTable).actionPerformed(e));
+        addUrlButton.addActionListener(new OpenAddUrlDialogAction(imageTable.getModel()));
+        downloadButton.addActionListener(new DownloadAction(imageTable));
         var footerPanel = new JPanel();
         footerPanel.add(addUrlButton);
         footerPanel.add(downloadButton);
