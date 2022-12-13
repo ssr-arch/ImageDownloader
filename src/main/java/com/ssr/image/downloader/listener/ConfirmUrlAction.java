@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 
 import com.ssr.image.downloader.model.TableRecord;
 import com.ssr.image.downloader.model.html.ImageSource;
-import com.ssr.image.downloader.ui.dialog.AddUrlDialog;
 import com.ssr.image.downloader.worker.GetImageSourcesWorker;
 
 public class ConfirmUrlAction extends AbstractAction {
@@ -21,7 +20,7 @@ public class ConfirmUrlAction extends AbstractAction {
     private final JTextField urlField;
     private final JDialog dialog;
 
-    public ConfirmUrlAction(DefaultTableModel tableModel, JTextField urlField, AddUrlDialog dialog) {
+    public ConfirmUrlAction(DefaultTableModel tableModel, JTextField urlField, JDialog dialog) {
         this.tableModel = tableModel;
         this.urlField = urlField;
         this.dialog = dialog;
