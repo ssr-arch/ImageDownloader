@@ -28,7 +28,11 @@ public class OpenAddUrlDialogAction extends AbstractAction {
         var panel = new JPanel();
         urlField.setPreferredSize(new DimensionUIResource(300, 20));
         okButton.setPreferredSize(new DimensionUIResource(80, 20));
-        okButton.addActionListener(new ConfirmUrlAction((DefaultTableModel) tableModel, urlField, dialog));
+        okButton.addActionListener(
+                new ConfirmUrlAction(
+                        (DefaultTableModel) tableModel,
+                        urlField.getText(),
+                        dialog));
         panel.add(urlField);
         panel.add(okButton);
         dialog.setTitle("add url");
