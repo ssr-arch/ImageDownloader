@@ -1,60 +1,59 @@
 package com.ssr.image.downloader.ui.table;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import javax.swing.JTable;
 
 import com.ssr.image.downloader.listener.ImageTableHeaderClickAdapter;
 import com.ssr.image.downloader.listener.ImageTablePreviewClickAdapter;
-import com.ssr.image.downloader.model.TableRecord;
 
 public class ImageTable extends JTable {
 
-    private final ImageTableModel model;
+    private final ImageTableModel tableModel;
 
     public ImageTable() {
-        this.model = new ImageTableModel();
-        setModel(model);
+        this.tableModel = new ImageTableModel();
+        setModel(tableModel);
         getTableHeader().addMouseListener(new ImageTableHeaderClickAdapter(this));
         addMouseListener(new ImageTablePreviewClickAdapter(this));
     }
 
     @Override
-    public int getSelectedRowCount() {
-        return model.getSelectedRowCount();
-    }
-
-    @Override
     public void selectAll() {
-        if (model != null) {
-            model.setAllChecks(true);
+        if (tableModel != null) {
+            var rowCount = tableModel.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                setValueAt(Boolean.TRUE, i, 0);
+            }
         }
     }
 
     @Override
     public void clearSelection() {
-        if (model != null) {
-            model.setAllChecks(false);
+        if (tableModel != null) {
+            var rowCount = tableModel.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                setValueAt(Boolean.FALSE, i, 0);
+            }
         }
     }
 
-    public Consumer<TableRecord[]> createInsertRecordAction() {
-        return t -> {
-            // discard all elements before inserting elements
-            model.setRowCount(0);
-            Arrays.asList(t).forEach(r -> model.addRow(r.getRowData()));
-        };
+    @Override
+    public int getSelectedRowCount() {
+        return tableModel.getDataVector()
+                .stream()
+                .map(v -> (Boolean) v.elementAt(0))
+                .filter(b -> b)
+                .toList()
+                .size();
     }
 
-    public Supplier<List<TableRecord>> createGetCheckedRecordsGetter() {
-        return () -> model.getDataVector()
+    @Override
+    public int[] getSelectedRows() {
+        var vector = tableModel.getDataVector();
+        return vector
                 .stream()
-                .map(TableRecord::new)
-                .filter(TableRecord::isChecked)
-                .toList();
+                .filter(v -> (Boolean) v.elementAt(0))
+                .mapToInt(v -> vector.indexOf(v))
+                .toArray();
     }
 
 }

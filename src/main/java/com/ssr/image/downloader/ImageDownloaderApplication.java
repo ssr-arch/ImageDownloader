@@ -11,7 +11,7 @@ public class ImageDownloaderApplication {
     public static void main(String[] args) {
         var frame = new JFrame("image-downloader");
         frame.setLayout(new BorderLayout());
-        frame.add(new MainPanel().get(), BorderLayout.CENTER);
+        frame.add(new MainPanel(), BorderLayout.CENTER);
         frame.setSize(500, 400);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -5,9 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CancellationException;
-import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -18,11 +18,11 @@ import com.ssr.image.downloader.model.html.ImageSource;
 public class DownloadImagesWorker extends SwingWorker<String, String> {
 
     private final ImageSource[] sources;
-    private final Consumer<String> setFileNameAction;
+    private final JLabel fileNameLabel;
 
-    public DownloadImagesWorker(ImageSource[] sources, Consumer<String> setFileNameAction) {
+    public DownloadImagesWorker(ImageSource[] sources, JLabel fileNameLabel) {
         this.sources = sources;
-        this.setFileNameAction = setFileNameAction;
+        this.fileNameLabel = fileNameLabel;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DownloadImagesWorker extends SwingWorker<String, String> {
 
     @Override
     protected void process(List<String> chunks) {
-        setFileNameAction.accept(chunks.get(0));
+        fileNameLabel.setText(chunks.get(0));
     }
 
     @Override
