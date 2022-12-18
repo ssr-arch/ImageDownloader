@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import com.ssr.image.downloader.ui.panel.MainPanel;
+import com.ssr.image.downloader.ui.MainPanel;
 
 public class ImageDownloaderApplication {
     public static void main(String[] args) {

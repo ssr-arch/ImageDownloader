@@ -10,7 +10,7 @@ import org.jsoup.Jsoup;
 
 import com.ssr.image.downloader.model.ImageCache;
 import com.ssr.image.downloader.model.html.ImageSource;
-import com.ssr.image.downloader.ui.dialog.PreviewDialog;
+import com.ssr.image.downloader.ui.PreviewDialog;
 
 public class ShowPreviewWorker extends SwingWorker<BufferedImage, String> {
 

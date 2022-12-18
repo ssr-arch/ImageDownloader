@@ -6,6 +6,8 @@ import javax.swing.JTable;
 
 import org.junit.jupiter.api.Test;
 
+import com.ssr.image.downloader.ui.ImageTableModel;
+
 public class ImageTableTest {
 
     @Test

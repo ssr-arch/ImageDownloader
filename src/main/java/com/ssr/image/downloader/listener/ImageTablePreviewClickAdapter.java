@@ -8,7 +8,7 @@ import javax.swing.event.MouseInputAdapter;
 
 import com.ssr.image.downloader.model.ImageTableColumnConstants;
 import com.ssr.image.downloader.model.html.ImageSource;
-import com.ssr.image.downloader.ui.dialog.PreviewDialog;
+import com.ssr.image.downloader.ui.PreviewDialog;
 import com.ssr.image.downloader.worker.ShowPreviewWorker;
 
 public class ImageTablePreviewClickAdapter extends MouseInputAdapter {
