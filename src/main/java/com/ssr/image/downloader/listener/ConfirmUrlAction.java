@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.ssr.image.downloader.model.TableRecord;
@@ -17,12 +18,12 @@ import com.ssr.image.downloader.worker.GetImageSourcesWorker;
 public class ConfirmUrlAction extends AbstractAction {
 
     private final DefaultTableModel tableModel;
-    private final String url;
+    private final JTextField urlLabel;
     private final JDialog dialog;
 
-    public ConfirmUrlAction(DefaultTableModel tableModel, String url, JDialog dialog) {
+    public ConfirmUrlAction(DefaultTableModel tableModel, JTextField urlLabel, JDialog dialog) {
         this.tableModel = tableModel;
-        this.url = url;
+        this.urlLabel = urlLabel;
         this.dialog = dialog;
     }
 
@@ -30,18 +31,20 @@ public class ConfirmUrlAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         List<ImageSource> sources = new ArrayList<>();
         try {
-            var getHtmlWorker = new GetImageSourcesWorker(url);
+            var getHtmlWorker = new GetImageSourcesWorker(urlLabel.getText());
             getHtmlWorker.execute();
             sources = getHtmlWorker.get();
         } catch (MalformedURLException ex) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(
+                    null,
                     "invalid url",
                     "error",
                     JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
             return;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(
+                    null,
                     "fatal ",
                     "error",
                     JOptionPane.ERROR_MESSAGE);
@@ -55,7 +58,8 @@ public class ConfirmUrlAction extends AbstractAction {
                 .map(TableRecord::getRowData)
                 .forEach(r -> tableModel.addRow(r));
         var message = String.format("add %s files", String.valueOf(tableModel.getRowCount()));
-        JOptionPane.showMessageDialog(null,
+        JOptionPane.showMessageDialog(
+                null,
                 message,
                 "add url",
                 JOptionPane.INFORMATION_MESSAGE);

@@ -31,7 +31,7 @@ public class OpenAddUrlDialogAction extends AbstractAction {
         okButton.addActionListener(
                 new ConfirmUrlAction(
                         (DefaultTableModel) tableModel,
-                        urlField.getText(),
+                        urlField,
                         dialog));
         panel.add(urlField);
         panel.add(okButton);

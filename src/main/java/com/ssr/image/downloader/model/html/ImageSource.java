@@ -1,17 +1,13 @@
 package com.ssr.image.downloader.model.html;
 
-import com.ssr.image.downloader.model.ImageAbsolutePath;
-
 public class ImageSource {
 
-    private final ImageAbsolutePath absolutePath;
     private final String source;
     private final String fileName;
 
-    public ImageSource(ImageAbsolutePath absolutePath) {
+    public ImageSource(String source) {
         // test
-        this.absolutePath = absolutePath;
-        this.source = absolutePath.toString();
+        this.source = source;
         var fileName = source.substring(source.lastIndexOf("/") + 1);
         if (!fileName.contains(".")) {
             fileName = String.join(".", fileName, "jpg");
@@ -29,7 +25,7 @@ public class ImageSource {
 
     @Override
     public int hashCode() {
-        return absolutePath.toString().hashCode();
+        return source.hashCode();
     }
 
     @Override
@@ -37,7 +33,7 @@ public class ImageSource {
         if (!(obj instanceof ImageSource)) {
             return false;
         }
-        return ((ImageSource) obj).absolutePath.equals(this);
+        return ((ImageSource) obj).source.equals(source);
     }
 
     public String getFormat() {
@@ -49,7 +45,7 @@ public class ImageSource {
     }
 
     public String getDownLoadUrl() {
-        return absolutePath.toString();
+        return source;
     }
 
 }
