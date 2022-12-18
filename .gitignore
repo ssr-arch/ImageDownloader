@@ -5,4 +5,4 @@
 target
 
 # other
-src/test/**/ImageDownloaderTest.java
+src/test/**/ImageDownloaderApplicationTest.java
