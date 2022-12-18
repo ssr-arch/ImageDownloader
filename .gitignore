@@ -6,3 +6,4 @@ target
 
 # other
 src/test/**/ImageDownloaderApplicationTest.java
+src/main/resources/html/*.*
